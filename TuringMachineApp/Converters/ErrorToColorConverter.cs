@@ -1,0 +1,13 @@
+﻿using System.Globalization;
+
+namespace TuringMachineApp.Converters;
+
+public class ErrorToColorConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        return value?.ToString().Contains("Ошибка") ?? false ? Colors.Red : Colors.White;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => null;
+}

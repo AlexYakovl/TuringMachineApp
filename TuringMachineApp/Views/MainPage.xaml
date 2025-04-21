@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:TuringMachineApp.ViewModels"
+    xmlns:conv="clr-namespace:TuringMachineApp.Converters"
+    x:Class="TuringMachineApp.Views.MainPage"
+    Title="Turing Machine">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <conv:ErrorToColorConverter x:Key="ErrorColorConverter" />
+            <conv:HeadConverter x:Key="HeadConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.BindingContext>
+        <vm:MainViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+            <Picker x:Name="ModePicker" 
+                    Title="Выберите режим работы"
+                    SelectedItem="{Binding CurrentMode}">
+                <Picker.Items>
+                    <x:String>Унарное сложение (+)</x:String>
+                    <x:String>Унарное умножение (*)</x:String>
+                    <x:String>Бинарное сложение</x:String>
+                </Picker.Items>
+            </Picker>
+
+            <Label Text="{Binding CurrentMode}" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <Entry Text="{Binding Input}" />
+
+            <Label Text="{Binding CurrentState}" 
+                   FontSize="16"
+                   TextColor="{Binding CurrentState, Converter={StaticResource ErrorColorConverter}}"/>
+
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Старт" 
+                        Command="{Binding StartCommand}" />
+                <Button Text="Шаг" 
+                        Command="{Binding StepCommand}" />
+            </HorizontalStackLayout>
+
+            <Label Text="Лента:" FontAttributes="Bold"/>
+            <CollectionView ItemsSource="{Binding Tape}" ItemsLayout="HorizontalList" HeightRequest="60">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="White"
+                   Padding="10"
+                   Margin="2"
+                   BackgroundColor="{Binding ., Converter={StaticResource HeadConverter}}">
+                            <Label Text="{Binding Symbol}" 
+                       FontSize="24" 
+                       HorizontalTextAlignment="Center"/>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
